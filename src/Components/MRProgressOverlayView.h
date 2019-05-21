@@ -192,6 +192,11 @@ typedef NS_ENUM(NSUInteger, MRProgressOverlayViewMode){
 @property (nonatomic, copy) MRProgressOverlayViewStopBlock stopBlock;
 
 /**
+ Used to control whether or not motion effects are used.
+ */
+@property (assign, nonatomic, getter=areDefaultMotionEffectsEnabled) BOOL defaultMotionEffectsEnabled;
+
+/**
  Change the tint color of the mode views.
  
  Redeclared to document usage, internally tintColorDidChange is used.

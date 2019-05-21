@@ -833,11 +833,30 @@ static void *MRProgressOverlayViewObservationContext = &MRProgressOverlayViewObs
 }
 
 - (void)applyMotionEffects {
-    UIMotionEffectGroup *motionEffectGroup = [[UIMotionEffectGroup alloc] init];
-    motionEffectGroup.motionEffects = @[[self motionEffectWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis],
-                                        [self motionEffectWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis]];
-    [self.dialogView addMotionEffect:motionEffectGroup];
-    [self.blurView addMotionEffect:motionEffectGroup];
+    if (self.defaultMotionEffectsEnabled) {
+        UIMotionEffectGroup *motionEffectGroup = [[UIMotionEffectGroup alloc] init];
+        motionEffectGroup.motionEffects = @[[self motionEffectWithKeyPath:@"center.x" type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis],
+                                            [self motionEffectWithKeyPath:@"center.y" type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis]];
+        [self.dialogView addMotionEffect:motionEffectGroup];
+        [self.blurView addMotionEffect:motionEffectGroup];
+    } else {
+        [self removeAllMotionEffects:self.dialogView];
+        [self removeAllMotionEffects:self.blurView];
+    }
+}
+
+- (void)removeAllMotionEffects:(UIView *)view {
+    NSArray *effects = view.motionEffects;
+    for (UIMotionEffect *effect in effects) {
+        [view removeMotionEffect:effect];
+    }
+}
+
+- (void)setDefaultMotionEffectsEnabled:(BOOL)defaultMotionEffectsEnabled {
+    if (defaultMotionEffectsEnabled != _defaultMotionEffectsEnabled) {
+        _defaultMotionEffectsEnabled = defaultMotionEffectsEnabled;
+        [self applyMotionEffects];
+    }
 }
 
 @end
